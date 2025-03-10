@@ -1,112 +1,95 @@
 import 'package:flutter/material.dart';
-import 'package:latihan_kuis/login_page.dart';
-import 'order_page.dart';
+import 'home_page.dart';
 
-class HomePage extends StatelessWidget {
-  final List<Map<String, dynamic>> menuItems = [
-    {"name": "Nasi Goreng", "price": 15000, "image": "assets/images/nasi_goreng.jpg"},
-    {"name": "Mie Goreng", "price": 12000, "image": "assets/images/mie_goreng.jpg"},
-    {"name": "Ayam Bakar", "price": 20000, "image": "assets/images/ayam_bakar.jpg"},
-    {"name": "Sate Ayam", "price": 18000, "image": "assets/images/sate_ayam.jpg"},
-  ];
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  void login() {
+    if (usernameController.text == 'fulan' && passwordController.text == 'fulan') {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Username atau Password salah'),
+          backgroundColor: Colors.red.shade500,
+          duration: Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.all(16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey[50], // Warna latar belakang lembut
-      appBar: AppBar(
-        title: Text("FoodApp", style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.blueGrey[700], // Warna AppBar lebih soft
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => LoginPage()),
-            );
-          },
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Judul "Menu Makanan"
-            Text(
-              "Menu Makanan",
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.blueGrey[900]),
-            ),
-            Divider(thickness: 2, height: 20),
-
-            // ListView untuk menampilkan menu makanan
-            Expanded(
-              child: ListView.builder(
-                itemCount: menuItems.length,
-                itemBuilder: (context, index) {
-                  final item = menuItems[index];
-                  return Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    elevation: 4,
-                    margin: EdgeInsets.symmetric(vertical: 10),
-                    child: Column(
-                      children: [
-                        // Gambar Makanan
-                        ClipRRect(
-                          borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-                          child: Image.asset(
-                            item["image"],
-                            height: 160,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-
-                        // Informasi Makanan
-                        Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                item["name"],
-                                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.blueGrey[900]),
-                              ),
-                              Text(
-                                "Rp ${item["price"]}",
-                                style: TextStyle(fontSize: 18, color: Colors.blueGrey[700]),
-                              ),
-                              SizedBox(height: 10),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => OrderPage(menuItem: item),
-                                      ),
-                                    );
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.blueGrey[700],
-                                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                                  ),
-                                  child: Text("Pesan", style: TextStyle(fontSize: 18, color: Colors.white)),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
+      backgroundColor: Colors.blueGrey[50],
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.fastfood, size: 80, color: Colors.blueGrey[700]),
+              SizedBox(height: 10),
+              Text(
+                "FoodApp",
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.blueGrey[900]),
               ),
-            ),
-          ],
+              SizedBox(height: 20),
+              Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    children: [
+                      TextField(
+                        controller: usernameController,
+                        decoration: InputDecoration(
+                          labelText: 'Username',
+                          prefixIcon: Icon(Icons.person),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      TextField(
+                        controller: passwordController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          labelText: 'Password',
+                          prefixIcon: Icon(Icons.lock),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: login,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blueGrey[700],
+                          padding: EdgeInsets.symmetric(horizontal: 50, vertical: 12),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        ),
+                        child: Text("Login", style: TextStyle(fontSize: 18, color: Colors.white)),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
