@@ -42,7 +42,11 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.fastfood, size: 80, color: Colors.blueGrey[700]), // Logo App
+              Image.asset(
+                'assets/images/logo.png',
+                width: 200,
+                height: 200,
+              ), // Logo App
               SizedBox(height: 10),
               Text(
                 "FoodApp",
